@@ -7,14 +7,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
-        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">
     <title>Hello, world!</title>
 </head>
 
 <body>
     <br />
+
+    <?php
+    $mysqli = new mysqli("db", "user", "test", "kingaziz_budget");
+
+    if ($mysqli->connect_errno) {
+        echo "Failed to connect to MySQL: " . $mysqli->connect_error;
+        exit();
+    }
+    ?>
+
+    <?php
+    /*
+    $sql = 'SELECT * FROM cashflow';
+
+    $result = $mysqli->query("SELECT * FROM cashflow");
+    if ($result) {
+        echo "Returned rows are: " . $result->num_rows;
+        // Free result set
+    }
+
+
+    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+        foreach ($row as $key => $value) {
+            echo $value;
+        }
+    }
+
+    $result->free_result();
+    */
+    ?>
 
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
@@ -48,7 +77,7 @@
     <!-- Tab panes -->
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane fade show active" id="home">
-            <img src="dashboard.png" width="95%"/>
+            <img src="dashboard.png" width="95%" />
         </div>
         <div role="tabpanel" class="tab-pane fade" id="projects">
             <h2>Projects</h2>
@@ -127,7 +156,8 @@
                         <td>2024-02-02</td> -->
                         <td><b style="color:orange">60%</b></td>
                         <td><a href="#" data-toggle="modal" data-target="#ModalSlide-RAP">Rp600,000,000</a></td>
-                        <td><a href="#" data-toggle="modal" data-target="#ModalSlide-RealisasiRAP">Rp500,000,000</a></td>
+                        <td><a href="#" data-toggle="modal" data-target="#ModalSlide-RealisasiRAP">Rp500,000,000</a>
+                        </td>
                         <td>45%</td>
                         <td>Mall Ciputra</td>
 
@@ -193,67 +223,287 @@
                 </tbody>
             </table>
         </div>
-        
-        <div role="tabpanel" class="tab-pane fade" id="cashflow">
-            <h2>Cashflow</h2>
 
-            <table class="table">
+        <div role="tabpanel" class="tab-pane fade" id="cashflow">
+            <h2 style="float: left">Cashflow</h2>
+            <button type="button" class="btn btn-primary" style="float: right;" data-toggle="modal" data-target="#ModalSlide-FormCashFlow">tambah cashflow</button>
+
+            <table class="table table-fixed">
                 <thead>
                     <tr>
-                        <th scope="col">tanggal</th>
-                        <th scope="col">proyek</th>
-                        <th scope="col">kode cashin</th>
-                        <th scope="col">kode cashout</th>
-                        <th scope="col">cashin</th>
-                        <th scope="col">cashout</th>
-                        <th scope="col">saldo</th>
+                        <th class="headcol" scope="col">Uraian</th>
+
+                        <?php
+                    
+                        $sql = "select * from week_2023 order by week_code asc LIMIT 1";
+                        $result = $mysqli->query($sql);
+                        $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+                        $countweekFrom = $row["week_code"];
+
+                        $sql = "select * from week_2023 order by week_code desc LIMIT 1";
+                        $result = $mysqli->query($sql);
+                        $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+                        $countweekTo = $row["week_code"];
+
+                        $sumGroup = "";
+
+                        for ($i = $countweekFrom; $i <= $countweekTo; $i++) {
+                            $sumGroup .= "SUM(IF(week_code = '" . $i . "',planned_amount,0)) AS '" . $i . "',";
+                        }
+
+                        $sql0 = "
+                                SELECT * FROM week_2023
+                            ";
+
+                        $sql1 = "
+                            (
+                                SELECT 'TOTAL' as `desc`,
+                                " . $sumGroup . "
+                                SUM(planned_amount) AS 'TOTAL' 
+                                FROM cashflow
+                                WHERE cashflow_type = 'C'
+                            )
+                            UNION
+                            (
+                                SELECT `spk_code`, 
+                                 " . $sumGroup . "
+                                SUM(planned_amount) AS 'TOTAL'
+                                FROM cashflow 
+                                WHERE cashflow_type = 'C'
+                                group by spk_code 
+                            )";
+
+                        $sql2 = "
+                            (
+                                SELECT 'TOTAL' as `desc`,
+                                " . $sumGroup . "
+                                SUM(planned_amount) AS 'TOTAL' 
+                                FROM cashflow
+                                WHERE cashflow_type = 'D'
+                            )
+                            UNION
+                            (
+                                SELECT `desc`, 
+                                " . $sumGroup . "
+                                SUM(planned_amount) AS 'TOTAL'
+                                FROM cashflow 
+                                WHERE cashflow_type = 'D'
+                                group by cash_code 
+                            )";
+
+                        $result = $mysqli->query($sql0);
+                        ?>
+                        <?php while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) : ?>
+                            <?php
+                            $start_date = date_create($row["start_date"]);
+                            $end_date = date_create($row["end_date"]);
+                            ?>
+                            <th scope="col">
+                                <?php echo number_format($row['planned_balance_end'] - $row['actual_balance']) ?> <br />
+                                <?php echo date_format($start_date, "Y"); ?> <br />
+                                <?php echo date_format($start_date, "d-M"); ?> <br />
+                                <?php echo date_format($end_date, "d-M"); ?> <br />
+                                <?php echo $row["week_code"]; ?> <br />
+                            </th>
+                        <?php endwhile; ?>
+
+                        <th class="tailcol" scope="col">
+                            Total
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td colspan="6" style="background-color: #e2e2e2;"><b>Saldo Awal</b></td>
-                        <td style="background-color: #e2e2e2;"><b>159.000.000,00</b></td>
+                        <td class="headcol">
+                            <b>SALDO AWAL</b>
+                        </td>
+                        <?php
+                        $result = $mysqli->query($sql0);
+                        ?>
+
+                        <?php while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) : ?>
+                            <td><b><?php echo number_format($row["planned_balance_start"]); ?></b></td>
+                        <?php endwhile; ?>
+
+                        <td class="tailcol"></td>
                     </tr>
-                    <tr>
-                        <td>20 Maret 2023</td>
-                        <td>Mxall Ciputra</td>
-                        <td><a href="#" data-toggle="modal" data-target="#ModalSlide-DetailCashIn">CI-000001</a></td>
-                        <td></td>
-                        <td>1.000.000,00</td>
-                        <td></td>
-                        <td>160.000.000,00</td>
-                    </tr>
-                    <tr>
-                        <td>21 Maret 2023</td>
-                        <td>Biz Park</td>
-                        <td><a href="#" data-toggle="modal" data-target="#ModalSlide-DetailCashIn">CI-000002</a></td>
-                        <td></td>
-                        <td>1.000.000,00</td>
-                        <td></td>
-                        <td>161.000.000,00</td>
-                    </tr>
-                    <tr>
-                        <td>29 Maret 2023</td>
-                        <td>hypermart</td>
-                        <td></td>
-                        <td><a href="#" data-toggle="modal" data-target="#ModalSlide-DetailCashOut">CO-000001</a></td>
-                        <td></td>
-                        <td>3.000.000,00</td>
-                        <td>158.000.000,00</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="background-color: #e2e2e2;"><b>Total Mutasi</b></td>
-                        <td style="background-color: #e2e2e2;"><b>2.000.000,00</b></td>
-                        <td style="background-color: #e2e2e2;"><b>3.000.000,00</b></td>
-                        <td style="background-color: #e2e2e2;"><b>158.000.000,00</b></td>
-                    </tr>
+
+                    <?php
+                    $result1 = $mysqli->query($sql1);
+                    $rowcount = 0;
+                    ?>
+                    <?php while ($row = mysqli_fetch_array($result1, MYSQLI_ASSOC)) : ?>
+                        <?php if ($rowcount == 0) : ?>
+                            <tr id="cashin">
+                            <?php else : ?>
+                            <tr class="item-cashin">
+                            <?php endif ?>
+                            <td class="headcol">
+                                <?php if ($rowcount == 0) : ?>
+                                    <b>CASHIN</b>
+                                <?php else : ?>
+                                    <?php echo $row["desc"] ?>
+                                <?php endif ?>
+
+                            </td>
+                            <?php for ($i = $countweekFrom; $i < ($countweekTo + 1); $i++) : ?>
+                                <td><?php echo number_format($row[$i]) ?></td>
+                            <?php endfor ?>
+
+
+                            <td class="tailcol"><?php if ($rowcount != 0) echo number_format($row["TOTAL"]) ?></td>
+                            </tr>
+
+                            <?php $rowcount++ ?>
+                        <?php endwhile; ?>
+
+
+                        <?php
+                        $result2 = $mysqli->query($sql2);
+                        $rowcount = 0;
+                        ?>
+
+                        <?php while ($row = mysqli_fetch_array($result2, MYSQLI_ASSOC)) : ?>
+                            <?php if ($rowcount == 0) : ?>
+                                <tr id="cashout">
+                                <?php else : ?>
+                                <tr class="item-cashout">
+                                <?php endif ?>
+                                <td class="headcol">
+                                    <?php if ($rowcount == 0) : ?>
+                                        <b>CASHOUT</b>
+                                    <?php else : ?>
+                                        <?php echo $row["desc"] ?>
+                                    <?php endif ?>
+
+                                </td>
+                                <?php for ($i = $countweekFrom; $i < ($countweekTo + 1); $i++) : ?>
+                                    <td><?php echo number_format($row[$i]) ?></td>
+                                <?php endfor ?>
+
+
+                                <td class="tailcol"><?php if ($rowcount != 0) echo number_format($row["TOTAL"]) ?></td>
+                                </tr>
+
+                                <?php $rowcount++ ?>
+                            <?php endwhile; ?>
+                            <tr>
+                                <td class="headcol">
+                                    <b>SALDO AKHIR</b>
+                                </td>
+                                <?php
+                                $result = $mysqli->query($sql0);
+                                ?>
+
+                                <?php while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) : ?>
+                                    <td><b><?php echo number_format($row["planned_balance_end"]); ?></b></td>
+                                <?php endwhile; ?>
+
+                                <td class="tailcol"></td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="22"></td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="22">
+                                    <h5>Actual Balance</h5>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="headcol"><b>BSI Bisnis</b></td>
+                                <?php
+                                $result = $mysqli->query($sql0);
+                                ?>
+
+                                <?php while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) : ?>
+                                    <td><?php echo number_format($row["bsi_bisnis_balance"]); ?></td>
+                                <?php endwhile; ?>
+
+                                <td class="tailcol"></td>
+                            </tr>
+                            <tr>
+                                <td class="headcol"><b>BSI Giro</b></td>
+
+                                <?php
+                                $result = $mysqli->query($sql0);
+                                ?>
+
+                                <?php while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) : ?>
+                                    <td><?php echo number_format($row["bsi_giro_balance"]); ?></td>
+                                <?php endwhile; ?>
+
+                                <td class="tailcol"></td>
+                            </tr>
+                            <tr>
+                                <td class="headcol"><b>BNI Bisnis</b></td>
+
+                                <?php
+                                $result = $mysqli->query($sql0);
+                                ?>
+                                <?php while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) : ?>
+                                    <td><?php echo number_format($row["bni_balance"]); ?></td>
+                                <?php endwhile; ?>
+
+                                <td class="tailcol"></td>
+                            </tr>
+                            <tr>
+                                <td class="headcol"><b>BTN</b></td>
+
+                                <?php
+                                $result = $mysqli->query($sql0);
+                                ?>
+                                <?php while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) : ?>
+                                    <td><?php echo number_format($row["btn_balance"]); ?></td>
+                                <?php endwhile; ?>
+
+                                <td class="tailcol"></td>
+                            </tr>
+                            <tr>
+                                <td class="headcol"><b>Mandiri</b></td>
+
+                                <?php
+                                $result = $mysqli->query($sql0);
+                                ?>
+                                <?php while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) : ?>
+                                    <td><?php echo number_format($row["mandiri_balance"]); ?></td>
+                                <?php endwhile; ?>
+
+                                <td class="tailcol"></td>
+                            </tr>
+                            <tr>
+                                <td class="headcol"><b>BRI</b></td>
+
+                                <?php
+                                $result = $mysqli->query($sql0);
+                                ?>
+                                <?php while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) : ?>
+                                    <td><?php echo number_format($row["bri_balance"]); ?></td>
+                                <?php endwhile; ?>
+
+                                <td class="tailcol"></td>
+                            </tr>
+
+                            <tr>
+                                <td class="headcol"><b>SALDO ACTUAL</b></td>
+
+                                <?php
+                                $result = $mysqli->query($sql0);
+                                ?>
+                                <?php while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) : ?>
+                                    <td><b><?php echo number_format($row["actual_balance"]); ?></b></td>
+                                <?php endwhile; ?>
+
+                                <td class="tailcol"></td>
+                            </tr>
+
                 </tbody>
             </table>
         </div>
     </div>
 
-    <div class="modal fade" id="ModalSlide-NilaiKontrak" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal fade" id="ModalSlide-NilaiKontrak" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
         <div class="modal-dialog modal-dialog-slideout" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -396,8 +646,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="ModalSlide-RealisasiRAB" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal fade" id="ModalSlide-RealisasiRAB" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
         <div class="modal-dialog modal-dialog-slideout" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -467,8 +716,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="ModalSlide-RAP" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2"
-        aria-hidden="true">
+    <div class="modal fade" id="ModalSlide-RAP" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
         <div class="modal-dialog modal-dialog-slideout" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -524,7 +772,7 @@
                                 <td>1</td>
                                 <td>8,000</td>
                             </tr>
-                            <tr class="analisa-pekerjaan-1"  id="analisa-pekerjaan-1-b">
+                            <tr class="analisa-pekerjaan-1" id="analisa-pekerjaan-1-b">
                                 <td></td>
                                 <td>2. Badeng / Direksi Keet / Gudang </td>
                                 <td>Ls</td>
@@ -548,7 +796,7 @@
                             </tr>
                             <tr class="child-analisa-pekerjaan-1-b">
                                 <td></td>
-                                <td>&nbsp; &nbsp; &nbsp;semen  + angkut </td>
+                                <td>&nbsp; &nbsp; &nbsp;semen + angkut </td>
                                 <td>zk</td>
                                 <td>0.450 </td>
                                 <td>Rp41,818.18</td>
@@ -697,8 +945,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="ModalSlide-RealisasiRAP" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal fade" id="ModalSlide-RealisasiRAP" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
         <div class="modal-dialog modal-dialog-slideout" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -717,7 +964,7 @@
                                 <th scope="col">Proyek</th>
                                 <th scope="col">Waktu Cashout</th>
                                 <th scope="col">Nominal Cashout</th>
-                                
+
                             </tr>
                         </thead>
                         <tbody>
@@ -769,8 +1016,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="ModalSlide-DetailCashIn" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal fade" id="ModalSlide-DetailCashIn" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
         <div class="modal-dialog modal-dialog-slideout" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -826,7 +1072,7 @@
                             </tr>
                             <tr>
                                 <td style="background-color: #efefef;">Capture No.Kwitansi</td>
-                                <td><img src="kwitansi.png" height="180px"/></td>
+                                <td><img src="kwitansi.png" height="180px" /></td>
                             </tr>
                             <tr>
                                 <td style="background-color: #efefef;">Actual Cash In</td>
@@ -846,8 +1092,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="ModalSlide-DetailCashOut" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal fade" id="ModalSlide-DetailCashOut" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
         <div class="modal-dialog modal-dialog-slideout" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -887,7 +1132,7 @@
                             </tr>
                             <tr>
                                 <td style="background-color: #efefef;">Bukti Transaksi</td>
-                                <td><img src="receipttrx.png" height="180px"/></td>
+                                <td><img src="receipttrx.png" height="180px" /></td>
                             </tr>
                             <tr>
                                 <td style="background-color: #efefef;">Actual Cash Out</td>
@@ -907,21 +1152,121 @@
         </div>
     </div>
 
+    <div class="modal fade" id="ModalSlide-FormCashFlow" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-slideout" role="document">
+            <div class="modal-content">
+                <form method="post" id="addcashflow-form">
+                    <div class="modal-header">
+                        <input style="font-size: 1.5em" type="text" class="form-control" name="cash_code" id="code-input" placeholder="Kode Cashflow">
+                    </div>
+                    <div class="modal-body">
+                        <table class="table form-group">
+                            <tbody>
+                                <tr>
+                                    <td style="background-color: #efefef;">Tipe Aliran</td>
+                                    <td>
+                                        <select class="form-control form-control-sm" name="cashflow_type" id="cashflowtype-input">
+                                            <option value="">-- Pilih Tipe Aliran --</option>
+                                            <option value="C">Masuk</option>
+                                            <option value="D">Keluar</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #efefef;">Nomor SPK</td>
+                                    <td>
+                                        <select class="form-control form-control-sm" name="spk_code" id="nomorspk-input">
+                                            <option value="">-- Pilih SPK --</option>
+                                            <option value="0020/SPK-TL/CD/X/2021/CIC/MKES">Nomor 0020/SPK-TL/CD/X/2021/CIC/MKES</option>
+                                            <option value="0033/SPK-TL/CD/X/2021/CIC/CI">Nomor 0020/SPK-TL/CD/X/2021/CIC/MKES</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #efefef;">Deskripsi</td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm" name="desc" id="desc-input" placeholder="Deskripsi">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #efefef;">Jenis Transaksi</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #efefef;">Nominal Direncanakan</td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm" name="planned_amount" id="plannedbudget-input" placeholder="Nominal">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #efefef;">Developer</td>
+                                    <td>PT. Mitrakusuma Erasemesta</td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #efefef;">Proyek</td>
+                                    <td>Mall Ciputra</td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #efefef;">Jatuh Tempo</td>
+                                    <td>
+                                        <!-- Date Picker -->
+                                        <div class="form-group mb-4">
+                                            <div class="datepicker date input-group">
+                                                <input type="text" placeholder="Choose Date" name="due_date" class="form-control" id="fecha1">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- // Date Picker -->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #efefef;">Bank Transaksi</td>
+                                    <td>
+                                        <select class="form-control form-control-sm" name="bank_code" id="bank-input">
+                                            <option value="">-- Pilih Bank --</option>
+                                            <option value="020601087063504">BSI Giro</option>
+                                            <option value="020601087063505">BSI Bisnis</option>
+                                            <option value="020601087063506">BNI Bisnis</option>
+                                            <option value="020601087063507">BTN</option>
+                                            <option value="020601087063508">Mandiri</option>
+                                            <option value="020601087063509">BRI</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #efefef;">No.Ref Transaksi</td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm" name="transaction_refnum" id="noref-input" placeholder="Nomor Referensi Transaksi">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" style="float: right; margin-left : 1em">Submit</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="float: right">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
-        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
     <script>
-        $(function () {
+        $(function() {
             $('.item-pekerjaan-1').toggle()
             $('.item-pekerjaan-2').toggle()
 
@@ -930,32 +1275,75 @@
             $('.child-analisa-pekerjaan-1-b').toggle()
 
             $('.analisa-pekerjaan-2').toggle()
+
+            $('.item-cashin').toggle()
+            $('.item-cashout').toggle()
+
+            $('.datepicker').datepicker({
+                language: "es",
+                autoclose: true,
+                format: "yyyy-mm-dd"
+            });
         })
 
-        $('#pekerjaan-1').bind("click", function () {
+        $('#pekerjaan-1').bind("click", function() {
             $('.item-pekerjaan-1').toggle()
         })
 
-        $('#pekerjaan-2').bind("click", function () {
+        $('#pekerjaan-2').bind("click", function() {
             $('.item-pekerjaan-2').toggle()
         })
 
-        $('#analisa-1').bind("click", function () {
+        $('#analisa-1').bind("click", function() {
             $('.analisa-pekerjaan-1').toggle()
         })
 
-        $('#analisa-2').bind("click", function () {
+        $('#analisa-2').bind("click", function() {
             $('.analisa-pekerjaan-2').toggle()
         })
 
 
-        $('#analisa-pekerjaan-1-a').bind("click", function () {
+        $('#analisa-pekerjaan-1-a').bind("click", function() {
             $('.child-analisa-pekerjaan-1-a').toggle()
         })
 
-        $('#analisa-pekerjaan-1-b').bind("click", function () {
+        $('#analisa-pekerjaan-1-b').bind("click", function() {
             $('.child-analisa-pekerjaan-1-b').toggle()
         })
+
+        $('#cashin').bind("click", function() {
+            $('.item-cashin').toggle("slow")
+        })
+
+        $('#cashout').bind("click", function() {
+            $('.item-cashout').toggle("slow")
+        })
+
+        function addCashflow() {
+            alert("haha");
+        }
+
+        $("#addcashflow-form").submit(function(e) {
+            e.preventDefault()
+            var data = $(this).serialize();
+            alert(data)
+
+            $.ajax({
+                type: "POST",
+                url: "process_cashflow.php",
+                data: data,
+                success: function(response) {
+                    console.log(response);
+                    location.reload();
+
+                },
+                error: function(request, status, error) {
+                    alert(request.responseText);
+                }
+            });
+
+            return false;
+        });
     </script>
 </body>
 
@@ -1014,6 +1402,34 @@
     .modal-dialog-slideout .modal-footer {
         height: 4rem;
         display: block;
+    }
+
+    .table-fixed {
+        text-align: left;
+        position: relative;
+    }
+
+    .table-fixed th {
+        position: sticky;
+        top: 0;
+        background-color: #efefef;
+    }
+
+    .table-fixed {
+        height: 300px;
+        overflow-y: scroll;
+    }
+
+    .headcol {
+        position: sticky;
+        left: 0;
+        background-color: #efefef;
+    }
+
+    .tailcol {
+        position: sticky;
+        right: 0;
+        background-color: #efefef;
     }
 </style>
 
