@@ -1325,6 +1325,15 @@
 
         $("#addcashflow-form").submit(function(e) {
             e.preventDefault()
+
+            // validate code cashflow
+            code_input = $("#code-input").val();
+            if (code_input == ""){
+                alert("dont forget to fill kode cashflow")
+                $("#code-input").trigger( "focus" );
+                return false;
+            }
+
             var data = $(this).serialize();
             alert(data)
 
@@ -1342,7 +1351,7 @@
                 }
             });
 
-            return false;
+            return true;
         });
     </script>
 </body>
