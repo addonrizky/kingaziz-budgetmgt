@@ -52,9 +52,9 @@ CREATE TABLE `developer` (
 -- kingaziz_budget.item_pekerjaan definition
 
 CREATE TABLE `item_pekerjaan` (
-  `kode_item_pekerjaan` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `kode_item_pekerjaan` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `kode_pekerjaan` varchar(20) DEFAULT NULL,
-  `kode_paket_pekerjaan_rap` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `kode_paket_pekerjaan_rap` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(20) DEFAULT NULL,
   `satuan` varchar(10) DEFAULT NULL,
@@ -67,12 +67,12 @@ CREATE TABLE `item_pekerjaan` (
 -- kingaziz_budget.item_pekerjaan_deleted definition
 
 CREATE TABLE `item_pekerjaan_deleted` (
-  `kode_item_pekerjaan` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `kode_pekerjaan` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `kode_paket_pekerjaan_rap` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `kode_item_pekerjaan` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `kode_pekerjaan` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `kode_paket_pekerjaan_rap` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `created_by` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `satuan` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `created_by` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `satuan` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `volume_bq` decimal(20,2) DEFAULT NULL,
   `subtotal` decimal(20,2) DEFAULT '0.00',
   PRIMARY KEY (`kode_item_pekerjaan`)
@@ -82,12 +82,12 @@ CREATE TABLE `item_pekerjaan_deleted` (
 -- kingaziz_budget.item_pekerjaan_rab definition
 
 CREATE TABLE `item_pekerjaan_rab` (
-  `kode_item_pekerjaan_rab` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `kode_pekerjaan` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `kode_paket_pekerjaan_rab` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `kode_item_pekerjaan_rab` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `kode_pekerjaan` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `kode_paket_pekerjaan_rab` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `created_by` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `satuan` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `created_by` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `satuan` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `volume_bq` decimal(20,2) DEFAULT NULL,
   `subtotal` decimal(20,2) DEFAULT '0.00',
   `margin` decimal(5,2) NOT NULL DEFAULT '0.00',
@@ -100,7 +100,7 @@ CREATE TABLE `item_pekerjaan_rab` (
 
 CREATE TABLE `item_pekerjaan_sumberdaya` (
   `kode_item_pekerjaan_sumberdaya` varchar(30) NOT NULL,
-  `kode_sumberdaya_supplier` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `kode_sumberdaya_supplier` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `kode_item_pekerjaan` varchar(40) NOT NULL,
   `koefisien` decimal(20,4) DEFAULT NULL,
   `subtotal` int DEFAULT NULL,
@@ -113,13 +113,13 @@ CREATE TABLE `item_pekerjaan_sumberdaya` (
 -- kingaziz_budget.item_pekerjaan_sumberdaya_deleted definition
 
 CREATE TABLE `item_pekerjaan_sumberdaya_deleted` (
-  `kode_item_pekerjaan_sumberdaya` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `kode_sumberdaya_supplier` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `kode_item_pekerjaan` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `kode_item_pekerjaan_sumberdaya` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `kode_sumberdaya_supplier` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `kode_item_pekerjaan` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `koefisien` decimal(20,4) DEFAULT NULL,
   `subtotal` int DEFAULT NULL,
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `created_by` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `created_by` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   PRIMARY KEY (`kode_item_pekerjaan_sumberdaya`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -127,13 +127,13 @@ CREATE TABLE `item_pekerjaan_sumberdaya_deleted` (
 -- kingaziz_budget.item_pekerjaan_sumberdaya_rab definition
 
 CREATE TABLE `item_pekerjaan_sumberdaya_rab` (
-  `kode_item_pekerjaan_sumberdaya_rab` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `kode_sumberdaya_supplier` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `kode_item_pekerjaan_rab` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `kode_item_pekerjaan_sumberdaya_rab` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `kode_sumberdaya_supplier` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `kode_item_pekerjaan_rab` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `koefisien` decimal(20,4) DEFAULT NULL,
   `subtotal` int DEFAULT NULL,
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `created_by` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `created_by` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `margin` decimal(5,2) NOT NULL DEFAULT '0.00',
   `subtotal_ori` int NOT NULL,
   PRIMARY KEY (`kode_item_pekerjaan_sumberdaya_rab`)
@@ -143,7 +143,7 @@ CREATE TABLE `item_pekerjaan_sumberdaya_rab` (
 -- kingaziz_budget.m_paket_pekerjaan definition
 
 CREATE TABLE `m_paket_pekerjaan` (
-  `coa` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `coa` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `paket_pekerjaan` varchar(500) DEFAULT NULL,
   `satuan` varchar(15) DEFAULT NULL,
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -157,7 +157,7 @@ CREATE TABLE `m_paket_pekerjaan` (
 -- kingaziz_budget.m_pekerjaan definition
 
 CREATE TABLE `m_pekerjaan` (
-  `kode_pekerjaan` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `kode_pekerjaan` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `pekerjaan` varchar(250) DEFAULT NULL,
   `satuan` varchar(20) DEFAULT NULL,
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -171,7 +171,7 @@ CREATE TABLE `m_pekerjaan` (
 
 CREATE TABLE `m_status` (
   `kode_status` int NOT NULL,
-  `status_desc` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `status_desc` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `satuan` varchar(10) DEFAULT NULL,
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(30) DEFAULT NULL,
@@ -187,8 +187,8 @@ INSERT INTO m_status (kode_status,status_desc,satuan,created_on,created_by) VALU
 -- kingaziz_budget.m_sumberdaya definition
 
 CREATE TABLE `m_sumberdaya` (
-  `kode_sumberdaya` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `sumberdaya` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `kode_sumberdaya` varchar(25) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `sumberdaya` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `satuan` varchar(10) DEFAULT NULL,
   `harga` int DEFAULT NULL,
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -213,12 +213,12 @@ CREATE TABLE `m_supplier` (
 -- kingaziz_budget.paket_pekerjaan_rab definition
 
 CREATE TABLE `paket_pekerjaan_rab` (
-  `kode_paket_pekerjaan_rab` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `coa` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `rab_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `kode_paket_pekerjaan_rab` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `coa` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `rab_code` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `subtotal_ori` int NOT NULL DEFAULT '0',
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `created_by` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `created_by` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `margin` decimal(5,2) DEFAULT '0.00',
   `subtotal` int NOT NULL,
   PRIMARY KEY (`kode_paket_pekerjaan_rab`)
@@ -228,7 +228,7 @@ CREATE TABLE `paket_pekerjaan_rab` (
 -- kingaziz_budget.paket_pekerjaan_rap definition
 
 CREATE TABLE `paket_pekerjaan_rap` (
-  `kode_paket_pekerjaan_rap` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `kode_paket_pekerjaan_rap` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `coa` varchar(15) DEFAULT NULL,
   `rap_code` varchar(100) DEFAULT NULL,
   `subtotal` int NOT NULL DEFAULT '0',
@@ -241,12 +241,12 @@ CREATE TABLE `paket_pekerjaan_rap` (
 -- kingaziz_budget.paket_pekerjaan_rap_deleted definition
 
 CREATE TABLE `paket_pekerjaan_rap_deleted` (
-  `kode_paket_pekerjaan_rap` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `coa` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `rap_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `kode_paket_pekerjaan_rap` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `coa` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `rap_code` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `subtotal` int NOT NULL DEFAULT '0',
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `created_by` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `created_by` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   PRIMARY KEY (`kode_paket_pekerjaan_rap`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -255,12 +255,12 @@ CREATE TABLE `paket_pekerjaan_rap_deleted` (
 
 CREATE TABLE `rab` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `description` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `developer_code` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `description` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `developer_code` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `status` int NOT NULL DEFAULT '1',
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `rab_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `created_by` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `rab_code` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `total_biaya` bigint NOT NULL DEFAULT '0',
   `margin` decimal(5,2) NOT NULL DEFAULT '0.00',
   `total_biaya_ori` bigint NOT NULL DEFAULT '0',
@@ -289,12 +289,12 @@ CREATE TABLE `rap` (
 
 CREATE TABLE `rap_deleted` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `description` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `developer_code` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `description` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `developer_code` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `status` int NOT NULL DEFAULT '0',
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `rap_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `created_by` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `rap_code` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `rap_UN_code` (`rap_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
