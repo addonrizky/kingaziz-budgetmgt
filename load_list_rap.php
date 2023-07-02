@@ -9,7 +9,7 @@ $sql = "SELECT * FROM rap a
 $result = $mysqli->query($sql);
 
 $i = 1;
-$rap_item = "";
+$rap = "";
 while($row = mysqli_fetch_array($result)){
     $rap .= '
         <tr class="rap-object" id="item-rap-'.$i.'">

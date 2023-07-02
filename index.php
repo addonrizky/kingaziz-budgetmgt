@@ -1960,6 +1960,12 @@
                     type: "POST",
                     url: "load_list_rap.php",
                     success: function(response) {
+                        if(response.length == 2 && $(".alert.rapalert").length == 0) {
+                            let info = '<div class="alert alert-primary rapalert" role="alert">Susun RAP terebih dahulu, utk melanjutkan langkah "Analisa Pekerjaan" dan RAB</div>'
+                            $("#rap").append(info)
+                            $(".loading").hide()
+                            return
+                        }
                         $("#rap table tbody").prepend(response)
                         $(".loading").hide()
                     },
@@ -2741,7 +2747,14 @@
                     type: "POST",
                     url: "load_list_rab.php",
                     success: function(response) {
-                        console.log(response)
+                        console.log(response.length)
+                        if(response.length == 0 && $(".alert.rabalert").length == 0) {
+                            let info = '<div class="alert alert-primary rabalert" role="alert">Susun RAP terebih dahulu, utk melanjutkan langkah "Analisa Pekerjaan" dan RAB</div>'
+                            $("#rab").append(info)
+                            $(".loading").hide()
+                            return
+                        }
+
                         $("#rab table tbody").prepend(response)
                         $(".loading").hide()
                     },

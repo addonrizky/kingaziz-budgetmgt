@@ -10,7 +10,7 @@ $result = $mysqli->query($sql);
 
 //echo $sql;
 $i = 1;
-$rab_item = "";
+$rab = "";
 while($row = mysqli_fetch_array($result)){
     $rab .= '
         <tr class="rab-object" id="item-rab-'.$i.'">
