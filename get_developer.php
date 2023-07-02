@@ -13,6 +13,8 @@ foreach ($developers_raw as $value) {
     $developer .= '<option class="dev-opt" value="'.$value["developer_code"].'">'.$value["developer_name"].'</option>';
 }
 
+$developer .= '<option class="dev-opt" value="add-master-developer"><a href="#">bouwheer lainnya ...</a></option>';
+
 echo $developer
 
 //<option value="020601087063504">PT BIMA SAKTI</option>

@@ -1207,16 +1207,22 @@
         <div class="modal-dialog modal-dialog-slideout" role="document">
             <div class="modal-content">
                 <form method="post" id="addrap-form">
-                    <div class="modal-header">
-                        <input style="font-size: 1.5em" type="text" class="form-control" name="rap_code" id="code-rap-input" placeholder="Kode RAP">
-                    </div>
+                    <h5 class="modal-header">
+                        Tambah Rencana Anggaran Pelaksanaan Baru
+                    </h5>
                     <div class="modal-body">
                         <table class="table form-group">
                             <tbody>
                                 <tr>
+                                    <td style="background-color: #efefef;">kode RAP</td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm" name="rap_code" id="code-rap-input" placeholder="Kode RAP">
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td style="background-color: #efefef;">project</td>
                                     <td>
-                                        <input type="text" class="form-control form-control-sm" name="description" id="desc-input" placeholder="Deskripsi">
+                                        <input type="text" class="form-control form-control-sm" name="description" id="desc-rap-input" placeholder="Deskripsi">
                                     </td>
                                 </tr>
                                 <tr>
@@ -1232,9 +1238,35 @@
                                 </tr>
                             </tbody>
                         </table>
+
+                        <table class="table form-group" style="display:none" id="form-new-master-developer">
+                            <tbody>
+                                <tr>
+                                    <td style="background-color: #efefef;">devloper code</td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm" id="developer-code-text" placeholder="kode developer">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-color: #efefef;">developer name</td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm" id="developer-name-text" placeholder="nama developer">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td align="right">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16" id="ok-master-developer-svg" style="cursor: pointer">
+                                            <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z" />
+                                            <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z" />
+                                        </svg>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" style="float: right; margin-left : 1em">Submit</button>
+                        <button type="submit" class="btn btn-primary" style="float: right; margin-left : 1em" id="submit-developer-btn">Submit</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" style="float: right">Cancel</button>
                     </div>
                 </form>
@@ -1857,6 +1889,8 @@
         $("#addformrap-button").click(function(e) {
             e.preventDefault()
 
+            clearFormTambahRAP()
+
             if ($(".dev-opt").length == 0) {
                 $(".loading").show()
                 $.ajax({
@@ -1880,9 +1914,11 @@
             e.preventDefault()
 
             // validate code cashflow
-            code_input = $("#code-rap-input").val();
-            if (code_input == "") {
-                alert("dont forget to fill kode rap")
+            let code_rap_input = $("#code-rap-input").val();
+            let desc_rap_input = $("#desc-raprap-input").val();
+            let developer_input = $("#developer-input").val();
+            if (code_rap_input == "" || desc_rap_input == "" || developer_input == "") {
+                alert("dont forget to fill kode rap OR project name OR bouwheer")
                 $("#code-rap-input").trigger("focus");
                 return false;
             }
@@ -2946,6 +2982,64 @@
                     alert(request.responseText);
                 }
             });
+        }
+
+        $('#developer-input').change(function() {
+            let value = $(this).val();
+
+            if (value == "add-master-developer") {
+                $("#form-new-master-developer").show()
+                $('#submit-developer-btn').hide()
+            } else {
+                $("#form-new-master-developer").hide()
+                $('#submit-developer-btn').show()
+            }
+        });
+
+        $("#ok-master-developer-svg").click(function(e) {
+            //$("#ModalSlide-FormPaketPekerjaan ")
+
+            let developer_code = $("#developer-code-text").val()
+            let developer_name = $("#developer-name-text").val()
+
+            let data = {
+                developer_code: developer_code,
+                developer_name: developer_name
+            }
+
+            if (developer_code == "" || developer_name == "") {
+                alert("semua inputan master developer data harus diisi")
+                return
+            }
+
+            // get last-1 tr info
+            let last_developer = $('#developer-input option').eq(-2)
+
+            $(".loading").show()
+            $.ajax({
+                type: "POST",
+                url: "add_developer.php",
+                data: data,
+                success: function(response) {
+                    console.log(response)
+                    last_developer.after(response)
+                    $("#developer-input").val(developer_code)
+                    $("#form-new-master-developer").hide()
+                    $('#submit-developer-btn').show()
+                    $(".loading").hide()
+                },
+                error: function(request, status, error) {
+                    alert(request.responseText);
+                }
+            });
+        })
+
+        function clearFormTambahRAP(){
+            $("#code-rap-input").val("")
+            $("#desc-rap-input").val("")
+            $("#developer-input").val("")
+            $("#developer-code-text").val("")
+            $("#developer-name-text").val("")
         }
 
         function clearFormTambahPaket(){
