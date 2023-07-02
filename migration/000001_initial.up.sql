@@ -7,7 +7,7 @@ CREATE TABLE `activity_log` (
   `client_ip_address` varchar(50) DEFAULT NULL,
   `access_timestamp` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- kingaziz_budget.cashflow definition
@@ -33,7 +33,7 @@ CREATE TABLE `cashflow` (
   `desc` varchar(200) DEFAULT '',
   `tag` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- kingaziz_budget.developer definition
@@ -46,7 +46,7 @@ CREATE TABLE `developer` (
   `created_by` varchar(50) DEFAULT NULL,
   `status` int NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- kingaziz_budget.item_pekerjaan definition
@@ -61,7 +61,7 @@ CREATE TABLE `item_pekerjaan` (
   `volume_bq` decimal(20,2) DEFAULT NULL,
   `subtotal` decimal(20,2) DEFAULT '0.00',
   PRIMARY KEY (`kode_item_pekerjaan`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- kingaziz_budget.item_pekerjaan_deleted definition
@@ -76,7 +76,7 @@ CREATE TABLE `item_pekerjaan_deleted` (
   `volume_bq` decimal(20,2) DEFAULT NULL,
   `subtotal` decimal(20,2) DEFAULT '0.00',
   PRIMARY KEY (`kode_item_pekerjaan`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- kingaziz_budget.item_pekerjaan_rab definition
@@ -93,7 +93,7 @@ CREATE TABLE `item_pekerjaan_rab` (
   `margin` decimal(5,2) NOT NULL DEFAULT '0.00',
   `subtotal_ori` decimal(20,2) NOT NULL,
   PRIMARY KEY (`kode_item_pekerjaan_rab`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- kingaziz_budget.item_pekerjaan_sumberdaya definition
@@ -107,7 +107,7 @@ CREATE TABLE `item_pekerjaan_sumberdaya` (
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`kode_item_pekerjaan_sumberdaya`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- kingaziz_budget.item_pekerjaan_sumberdaya_deleted definition
@@ -121,7 +121,7 @@ CREATE TABLE `item_pekerjaan_sumberdaya_deleted` (
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   PRIMARY KEY (`kode_item_pekerjaan_sumberdaya`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- kingaziz_budget.item_pekerjaan_sumberdaya_rab definition
@@ -137,7 +137,7 @@ CREATE TABLE `item_pekerjaan_sumberdaya_rab` (
   `margin` decimal(5,2) NOT NULL DEFAULT '0.00',
   `subtotal_ori` int NOT NULL,
   PRIMARY KEY (`kode_item_pekerjaan_sumberdaya_rab`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- kingaziz_budget.m_paket_pekerjaan definition
@@ -151,7 +151,7 @@ CREATE TABLE `m_paket_pekerjaan` (
   `alias` varchar(50) DEFAULT NULL,
   `status` int NOT NULL DEFAULT '1',
   PRIMARY KEY (`coa`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- kingaziz_budget.m_pekerjaan definition
@@ -164,7 +164,7 @@ CREATE TABLE `m_pekerjaan` (
   `created_by` varchar(50) DEFAULT NULL,
   `status` int NOT NULL DEFAULT '1',
   PRIMARY KEY (`kode_pekerjaan`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- kingaziz_budget.m_status definition
@@ -176,7 +176,7 @@ CREATE TABLE `m_status` (
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`kode_status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 INSERT INTO m_status (kode_status,status_desc,satuan,created_on,created_by) VALUES
 	 (0,'penyusunan rap',NULL,'2023-05-21 02:29:45',NULL),
@@ -195,7 +195,7 @@ CREATE TABLE `m_sumberdaya` (
   `created_by` varchar(30) DEFAULT NULL,
   `status` int NOT NULL DEFAULT '1',
   PRIMARY KEY (`kode_sumberdaya`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- kingaziz_budget.m_supplier definition
@@ -207,7 +207,7 @@ CREATE TABLE `m_supplier` (
   `created_by` varchar(30) DEFAULT NULL,
   `status` int NOT NULL DEFAULT '1',
   PRIMARY KEY (`kode_supplier`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- kingaziz_budget.paket_pekerjaan_rab definition
@@ -222,7 +222,7 @@ CREATE TABLE `paket_pekerjaan_rab` (
   `margin` decimal(5,2) DEFAULT '0.00',
   `subtotal` int NOT NULL,
   PRIMARY KEY (`kode_paket_pekerjaan_rab`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- kingaziz_budget.paket_pekerjaan_rap definition
@@ -235,7 +235,7 @@ CREATE TABLE `paket_pekerjaan_rap` (
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`kode_paket_pekerjaan_rap`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- kingaziz_budget.paket_pekerjaan_rap_deleted definition
@@ -248,7 +248,7 @@ CREATE TABLE `paket_pekerjaan_rap_deleted` (
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   PRIMARY KEY (`kode_paket_pekerjaan_rap`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- kingaziz_budget.rab definition
@@ -267,7 +267,7 @@ CREATE TABLE `rab` (
   `project_group` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `rap_UN_code` (`rab_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- kingaziz_budget.rap definition
@@ -282,7 +282,7 @@ CREATE TABLE `rap` (
   `rap_code` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `rap_UN_code` (`rap_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- kingaziz_budget.rap_deleted definition
@@ -297,7 +297,7 @@ CREATE TABLE `rap_deleted` (
   `rap_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `rap_UN_code` (`rap_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- kingaziz_budget.sumberdaya_supplier definition
@@ -311,7 +311,7 @@ CREATE TABLE `sumberdaya_supplier` (
   `created_by` varchar(30) DEFAULT NULL,
   `status` int unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`kode_sumberdaya_supplier`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- kingaziz_budget.week_2023 definition
@@ -331,4 +331,4 @@ CREATE TABLE `week_2023` (
   `bsi_giro_balance` bigint NOT NULL DEFAULT '0',
   `planned_balance_end` bigint NOT NULL DEFAULT '0',
   PRIMARY KEY (`week_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=667 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=667 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
