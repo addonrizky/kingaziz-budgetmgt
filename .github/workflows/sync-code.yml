@@ -1,0 +1,28 @@
+
+name: sync-code
+on:
+  push:
+    branches: 
+    - 'main'
+  
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: 103.183.74.243
+        username: bdt
+        password: Bre@kthrough2312!
+        port: 22
+        script: |
+          cd /var/www/html/kingaziz-budgetmgt
+          git stash -u
+          git pull origin main
+          find='new mysqli("db", "user", "test", "kingaziz_budget")'
+          replace='new mysqli("127.0.0.1", "root", "root", "kingaziz_budget")'
+          sed -i "s/$find/$replace/g" *.php
+ 
