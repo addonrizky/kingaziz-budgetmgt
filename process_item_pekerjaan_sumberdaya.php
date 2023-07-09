@@ -1,6 +1,14 @@
 <?php
+session_start();
+include 'util.php';
+include 'activity.php';
 
 $mysqli = new mysqli("db", "user", "test", "kingaziz_budget");
+
+$activity_name =  basename(__FILE__, '.php');
+$session_id = session_id();
+$client_ip_address = get_client_ip();
+log_activity($mysqli, $activity_name, $session_id, $client_ip_address);
 
 $kode_item_pekerjaan_sumberdaya = $_POST["kode_item_pekerjaan_sumberdaya"];
 $kode_item_pekerjaan = $_POST["kode_item_pekerjaan"];
@@ -56,8 +64,9 @@ try {
     <tr kode-paket-pekerjaan-rap="' . $kode_paket_pekerjaan_rap . '" class="analisa-item-pekerjaan-' . $kode_item_pekerjaan . '" id="sumberdaya-' . $kode_item_pekerjaan_sumberdaya . '">
         <td></td>
         <td>' . $row["sumberdaya"] . '</td>
+        <td>' . number_format($row["koefisien"], 2) . '</td>
         <td>' . $row["satuan"] . '</td>
-        <td>' . $row["koefisien"] . '</td>
+        <td></td>
         <td align="right">' . number_format($row["harga_supplier"], 0) . '</td>
         <td align="right">' . number_format($row["subtotal"], 0) . '</td>
         <td></td>

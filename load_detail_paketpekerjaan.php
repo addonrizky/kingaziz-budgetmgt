@@ -1,5 +1,14 @@
 <?php
+session_start();
+include 'util.php';
+include 'activity.php';
+
 $mysqli = new mysqli("db", "user", "test", "kingaziz_budget");
+
+$activity_name =  basename(__FILE__, '.php');
+$session_id = session_id();
+$client_ip_address = get_client_ip();
+log_activity($mysqli, $activity_name, $session_id, $client_ip_address);
 
 $kode_paket_pekerjaan_rap = $_POST["kode_paket_pekerjaan_rap"];
 
@@ -26,8 +35,9 @@ while($row = mysqli_fetch_array($result)){
                 </svg>
             </span>
         </td>
-        <td>'.$row["satuan"].'</td>
         <td></td>
+        <td>'.$row["satuan"].'</td>
+        <td>'.$row["kode_item_pekerjaan"].'</td>
         <td></td>
         <td id="subtotal-item-'.$row["kode_item_pekerjaan"].'" align="right">'.number_format((int)$row["subtotal_item"], 0).'</td>
         <td></td>
@@ -51,7 +61,7 @@ while($row = mysqli_fetch_array($result)){
 
 $rap .= '
     <tr kode-paket-pekerjaan-rap="'.$kode_paket_pekerjaan_rap.'" class="analisa-paket-pekerjaan-add-'.$kode_paket_pekerjaan_rap.'">
-        <td colspan="9"></td>
+        <td colspan="10"></td>
         <td><a data-toggle="modal" data-target="#ModalSlide-FormPekerjaan" href="#" id="'.$kode_paket_pekerjaan_rap.'" class="new-pekerjaan-form">+tambah pekerjaan ... </a></td>
     </tr>
 ';

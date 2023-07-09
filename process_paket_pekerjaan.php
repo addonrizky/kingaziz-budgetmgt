@@ -1,6 +1,14 @@
 <?php
+session_start();
+include 'util.php';
+include 'activity.php';
 
 $mysqli = new mysqli("db", "user", "test", "kingaziz_budget");
+
+$activity_name =  basename(__FILE__, '.php');
+$session_id = session_id();
+$client_ip_address = get_client_ip();
+log_activity($mysqli, $activity_name, $session_id, $client_ip_address);
 
 $rap_code = $_POST["rap_code"];
 $coa = $_POST["coa"];
@@ -40,10 +48,11 @@ $paket_added .= '
             </span>
         </td>
         <td>'.$row["paket_pekerjaan"].'</td>
+        <td></td>
         <td>'.$row["satuan"].'</td>
         <td></td>
         <td></td>
-        <td id="subtotal-paket-'.$kode_paket_pekerjaan_rap.'">'.$row["subtotal"].'</td>
+        <td id="subtotal-paket-'.$kode_paket_pekerjaan_rap.'" align="right">'.$row["subtotal"].'</td>
         <td></td>
         <td></td>
         <td></td>

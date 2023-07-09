@@ -1,5 +1,14 @@
 <?php
+session_start();
+include 'util.php';
+include 'activity.php';
+
 $mysqli = new mysqli("db", "user", "test", "kingaziz_budget");
+
+$activity_name =  basename(__FILE__, '.php');
+$session_id = session_id();
+$client_ip_address = get_client_ip();
+log_activity($mysqli, $activity_name, $session_id, $client_ip_address);
 
 $kode_paket_pekerjaan_rab = $_POST["kode_paket_pekerjaan_rab"];
 
@@ -24,6 +33,7 @@ while($row = mysqli_fetch_array($result)){
                 </svg>
             </span>
         </td>
+        <td></td>
         <td>'.$row["satuan"].'</td>
         <td></td>
         <td></td>

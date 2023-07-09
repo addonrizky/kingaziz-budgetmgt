@@ -1,3 +1,9 @@
+<?php
+    session_start();
+    include 'util.php';
+    include 'activity.php';
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -17,6 +23,11 @@
 
     <?php
     $mysqli = new mysqli("db", "user", "test", "kingaziz_budget");
+
+    $activity_name =  basename(__FILE__, '.php');
+    $session_id = session_id();
+    $client_ip_address = get_client_ip();
+    log_activity($mysqli, $activity_name, $session_id, $client_ip_address);
 
     if ($mysqli->connect_errno) {
         echo "Failed to connect to MySQL: " . $mysqli->connect_error;
@@ -781,9 +792,10 @@
                         <thead>
                             <tr>
                                 <th scope="col">COA Pekerjaan</th>
-                                <th scope="col">Item Pekerjaan</th>
-                                <th scope="col">Sat</th>
+                                <th scope="col">Uraian Pekerjaan</th>
                                 <th scope="col">Koef</th>
+                                <th scope="col">Sat</th>
+                                <th scope="col">Analisa</th>
                                 <th scope="col">Harga</th>
                                 <th scope="col">Jumlah Harga</th>
                                 <th scope="col"></th>
@@ -797,11 +809,11 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="9"></td>
+                                <td colspan="10"></td>
                                 <td><a href="#" data-toggle="modal" data-target="#ModalSlide-FormPaketPekerjaan" id="new-paket-form"><b>+tambah</b></a></td>
                             </tr>
                             <tr>
-                                <td colspan="8"></td>
+                                <td colspan="9"></td>
                                 <td>
                                     <h5>total</h5>
                                 </td>

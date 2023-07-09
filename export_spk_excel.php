@@ -1,4 +1,7 @@
 <?php
+session_start();
+include 'util.php';
+include 'activity.php';
 
 require('./PhpSpreadsheet/vendor/autoload.php');
 
@@ -13,6 +16,11 @@ use PhpOffice\PhpSpreadsheet\Style\Style;
 $start_data_row = 8;
 
 $mysqli = new mysqli("db", "user", "test", "kingaziz_budget");
+
+$activity_name =  basename(__FILE__, '.php');
+$session_id = session_id();
+$client_ip_address = get_client_ip();
+log_activity($mysqli, $activity_name, $session_id, $client_ip_address);
 
 $rab_code = $_GET["rab_code"];
 

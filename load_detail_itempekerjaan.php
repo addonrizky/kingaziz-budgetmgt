@@ -1,5 +1,14 @@
 <?php
+session_start();
+include 'util.php';
+include 'activity.php';
+
 $mysqli = new mysqli("db", "user", "test", "kingaziz_budget");
+
+$activity_name =  basename(__FILE__, '.php');
+$session_id = session_id();
+$client_ip_address = get_client_ip();
+log_activity($mysqli, $activity_name, $session_id, $client_ip_address);
 
 $kode_item_pekerjaan = $_POST["kode_item_pekerjaan"];
 $kode_paket_pekerjaan_rap = $_POST["kode_paket_pekerjaan_rap"];
@@ -20,8 +29,9 @@ while($row = mysqli_fetch_array($result)){
         <td>
             '.$row["sumberdaya"].' 
         </td>
+        <td>'.number_format($row["koefisien"], 2).'</td>
         <td>'.$row["satuan"].'</td>
-        <td>'.$row["koefisien"].'</td>
+        <td></td>
         <td align="right">'.number_format($row["harga_supplier"], 0).'</td>
         <td align="right">'.number_format($row["koefisien"] * $row["harga_supplier"], 0).'</td>
         <td></td>
@@ -43,7 +53,7 @@ while($row = mysqli_fetch_array($result)){
 
 $sumberdaya .= '
     <tr kode-paket-pekerjaan-rap="'.$kode_paket_pekerjaan_rap.'" kode_item_pekerjaan="'.$kode_item_pekerjaan.'" class="analisa-item-pekerjaan-add-'.$kode_item_pekerjaan.'">
-        <td colspan="9"></td>
+        <td colspan="10"></td>
         <td><a data-toggle="modal" data-target="#ModalSlide-FormSumberdaya" href="#" id="'.$kode_item_pekerjaan.'" class="new-sumberdaya-form">+tambah sumberdaya ... </a></td>
     </tr>
 ';

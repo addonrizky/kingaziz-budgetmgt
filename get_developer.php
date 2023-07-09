@@ -1,5 +1,14 @@
 <?php
+session_start();
+include 'util.php';
+include 'activity.php';
+
 $mysqli = new mysqli("db", "user", "test", "kingaziz_budget");
+
+$activity_name =  basename(__FILE__, '.php');
+$session_id = session_id();
+$client_ip_address = get_client_ip();
+log_activity($mysqli, $activity_name, $session_id, $client_ip_address);
 
 $sql = "select * from developer where status = 1";
 $result = $mysqli->query($sql);

@@ -1,6 +1,14 @@
 <?php
+session_start();
+include 'util.php';
+include 'activity.php';
 
 $mysqli = new mysqli("db", "user", "test", "kingaziz_budget");
+
+$activity_name =  basename(__FILE__, '.php');
+$session_id = session_id();
+$client_ip_address = get_client_ip();
+log_activity($mysqli, $activity_name, $session_id, $client_ip_address);
 
 $kode_item_pekerjaan = $_POST["kode_item_pekerjaan"];
 $kode_pekerjaan = $_POST["kode_pekerjaan"];
@@ -43,10 +51,11 @@ $item_pekerjaan_added = '
                 </svg>
             </span>
         </td>
+        <td></td>
         <td>'.$row["satuan"].'</td>
+        <td>'.$row["kode_item_pekerjaan"].'</td>
         <td></td>
-        <td></td>
-        <td id="subtotal-item-'.$kode_item_pekerjaan.'">'.$row["subtotal_item"].'</td>
+        <td id="subtotal-item-'.$kode_item_pekerjaan.'" align="right">'.number_format($row["subtotal_item"], 0).'</td>
         <td></td>
         <td>'.$row["volume_bq"].'</td>
         <td></td>

@@ -1,7 +1,16 @@
 <?php
+session_start();
+include 'util.php';
+include 'activity.php';
+
 print_r($_POST);
 
 $mysqli = new mysqli("db", "user", "test", "kingaziz_budget");
+
+$activity_name =  basename(__FILE__, '.php');
+$session_id = session_id();
+$client_ip_address = get_client_ip();
+log_activity($mysqli, $activity_name, $session_id, $client_ip_address);
 
 $cash_code = $_POST["cash_code"];
 $cashflow_type = $_POST["cashflow_type"];
